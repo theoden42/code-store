@@ -1,0 +1,76 @@
+
+/* @uthor: (g)theoden42 */
+
+#include <bits/stdc++.h>
+using namespace std;
+
+#ifdef ON_PC
+    #include <debug.h>
+#else
+    #define debug(x...)
+#endif
+
+#define ll long long
+#define ld long double
+#define all(a) (a).begin(), (a).end()
+
+const int MAX_N = 1e6 + 5;
+const ll MOD = 1e9 + 7;
+const ll INF = 1e18;
+
+void solve() {
+    int n, m;
+    cin >> n >> m;
+    vector<vector<pair<int,int>>> g(n);
+    for(int i = 1; i <= m; i++){
+    	int a, b, c;
+    	cin >> a >> b >> c;
+    	a--;
+    	b--;
+    	g[a].push_back({b, c});
+    }
+    vector<int> vis(n, 0);
+    vector<ll> dis(n, INF);
+    vector<int> routes(n, -1);
+
+    dis[0] = 0;
+
+    multiset<pair<ll,int>> pq;
+
+    for(int i = 0; i < n; i++){
+    	pq.insert({dis[i], i});
+    }
+
+    while(!pq.empty()){
+    	auto it = pq.begin();
+    	int u = it->second;
+    	ll w = it->first;
+    	vis[u] = 1;
+    	pq.erase(it);
+    	for(auto x: g[u]){
+    		if(!vis[x.first] && dis[x.first] >= w + x.second){
+    			pq.erase(pq.find({dis[x.first], x.first}));
+    			dis[x.first] = w + x.second;
+    			pq.insert({dis[x.first], x.first});
+    		}
+    	}
+    }
+
+
+    for(int i = 0; i < n; ++i){
+    	cout << dis[i] << " ";
+    }
+    cout << endl;
+
+}
+
+int main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0); cout.tie(0);
+    int tc = 1;
+    //cin >> tc;
+    for (int t = 1; t <= tc; t++) {
+        // cout << "Case #" << t << ": ";
+        solve();
+    }
+}
