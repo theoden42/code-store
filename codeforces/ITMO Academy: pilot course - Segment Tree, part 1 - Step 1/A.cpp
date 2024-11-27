@@ -46,6 +46,7 @@ struct segTree{
 
 
 	void build(vector<int>& a, int x, int lx, int rx){
+		debug(x, rx, lx);
 		if(rx - lx == 1){
 			if(lx < (int)a.size()){
 				sums[x] = a[lx];

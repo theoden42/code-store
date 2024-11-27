@@ -27,28 +27,33 @@ const ll MOD = 1e9 + 7;
 const ll INF = 1e9;
 
 void solve() {
-    int n, k;
-    cin >> n;
-    int sz = n;
-    ordset<int> st;
+    int q;
+    cin >> q;
 
-    for(int i = 0; i < n; i++){
-        st.insert(i + 1);
-    }
+    function<int(int,int)> dfs = [&](int n, int k){
+        if(n & 1){
+            if(k <= (n + 1) / 2){
+                return 2 * k;
+            } else {
+                int v = 2 * dfs(n / 2, k - (n + 1) / 2) + 1;
+                return v;
+            }
+        } else {
+            if(k <= n / 2){
+                return 2 * k;
+            } else {
+                int v = 2 * dfs(n / 2, k - n / 2) - 1;
+                return v;
+            }
+        }
+    };
 
-    int count = 0;
-    int pos = 1 % sz;
-    while(count < n ){
-        debug(st, pos);
-        auto it = st.find_by_order(pos);
-        cout << *it << " ";
-        st.erase(it);
-        sz = (int)st.size();
-        if(sz == 0)break;
-        pos = (pos + 1) % sz;
-        count++;
+    for(int i = 1; i <= q; i++){
+        int n, k;
+        cin >> n >> k;
+        int ans = dfs(n, k);       
+        cout << ans << "\n";
     }
-    cout << endl;
 }
 
 

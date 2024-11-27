@@ -31,68 +31,45 @@
 	    string s;
 	    cin >> s;
 	    int n = s.size();
-	    int count = 0;
-	    int flag = 0;
 
-	    int val = 1e12;
 
-	    int sum = 0;
+	    int val = 1e12;	
+	    int ans = 0;
 
-	    vector<int> pr(n + 1);
-	    pr[n] = 0;
 
-	    for(int i = 1; i <= n; i++){
-	    	if(s[i - 1] == '1'){
-	    		pr[i] = pr[i -  1] + 1;
-	    	}
-	    	else{
-	    		pr[i] = pr[i - 1];
-	    	}
+	    int c0 = 0;
+	    for(int i = 0; i < n; i++){
+	    	c0 += (s[i] == '0');
 	    }
 
-	    // debug(pr);
+	    int mn = c0 * (val + 1);
 
-	    for(int j = n - 1; j >= 0; j--){
-	    	if(s[j] == '1')continue;
+	   	for(int i = 0; i < n; i++){
+	   		if(s[i] == '0'){
+	   			c0--;
+	   		}
+	   		else{
+	   			int j = i;
+	   			int count = 0;
+	   			while(j < n && s[j] == '1'){
+	   				count++;
+	   				j++;
+	   			}
 
+	   			if(j == n)break;
+   				int temp = ans + c0 * (val + 1);
 
+   				if(count == 1 && (j == n - 1 || (j < n - 1 && s[j + 1] == '1'))){
+   					temp = ans + (c0 - 1) * (val + 1) + val;
+   				}
+   				mn = min(mn, temp);
+   				ans += (count) * (val + 1);	
+   				i = j - 1;
+   			}
+	   	}
 
-	    	int k = j;
-	    	int c1 = 0;
-
-	    	while(k >= 0 && s[k] == '0'){
-	    		// debug(s[k], k);
-	    		c1++;
-	    		k--;
-	    	}
-
-	    	if(k == -1)break;
-
-			int x = pr[j + 1];
-			// debug(c1);
-			if(c1 == 1 && (j == 1 || s[j - 2] == '0')){
-				sum += val;
-				pr[j] -= 1;
-				// debug(pr);
-				swap(s[j], s[j - 1]);
-				continue;
-			}
-			// debug(sum);
-			// debug(k, c1, x);
-
-			if(x <= c1){
-				sum += x * (val + 1);
-				break;
-			}
-			else{
-				sum += c1 * (val + 1);
-				j = k + 1;
-			}
-
-	    }
-
-	    cout << sum << "\n";
-
+	   	mn = min(mn, ans);
+	   	cout << mn << "\n";
 
 	}
 

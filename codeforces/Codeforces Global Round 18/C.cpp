@@ -23,44 +23,33 @@ void solve() {
     cin >> n;
     string a, b;
     cin >> a >> b;
-    if(a == b){
-    	cout << 0 << "\n";
-    	return;
+    int x, y, z, w;
+    x = y = z = w = 0;
+
+    for(int i = 0; i < n; i++){
+        if(a[i] == '1' && b[i] == '1')x++;
+        if(a[i] == '1' && b[i] == '0')y++;
+        if(a[i] == '0' && b[i] == '1')z++;
+        if(a[i] == '0' && b[i] == '0')w++;
     }
 
+    debug(x, y, z, w);
 
-    int count = 0;
-    for(auto& c : a){
-    	if(c == '1')count++;
+    if(((y != z) && (x != w + 1))){
+        cout << "-1\n";
+        return;
     }
-    if(count == 0){
-    	cout << "-1\n";
-    	return;
+    else{
+        int mn = INF;
+        
+        if(y == z)
+            mn = min(mn, 2 * y);
+
+        if(x == w + 1)
+            mn = min(mn, (2 * (x - 1) + 1));
+        
+        cout << mn << "\n";
     }
-
-   	if(n == 2){
-   		cout << "1\n";
-   		return;
-   	}
-
-   	int count2 = 0;
-   	for(int i = 0; i < n; i++){
-   		if(b[i] == '1')count2++;
-   	}
-
-   	if(count2 != count){
-   		cout << "-1\n";
-   		return;
-   	}
-
-   	int c1 = 0, c2 = 0;
-   	for(int i = 0; i < n; i++){
-   		if(a[i] == '1' && b[i] == '0')c1++;
-   		if(a[i] == '0' && b[i] == '1')c2++;
-   	}
-
-   	
-
 }
 
 int main() {

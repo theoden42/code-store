@@ -1,4 +1,3 @@
-
 /* @uthor: (g)theoden42 */
 
 #include <bits/stdc++.h>

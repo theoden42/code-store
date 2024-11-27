@@ -31,31 +31,14 @@ const ll INF = 1e9;
 void solve() {
     int a, b;
     cin >> a >> b;
-    int m1 = min(a, b);
-    int m2 = max(a, b);
 
-    int l = 2;
-    int u = m2;
-    int ind = m2;
-
-    while(l <= u){
-    	int mid = l + (u - l) / 2;
-    	int x1 = (m2 + mid - 1) / mid + mid - 1;
-    	int x2 = (m2 + mid - 2) / (mid - 1) + mid - 2;
-    	if(x1 <= x2){
-    		ind = mid;
-    		l = mid + 1;
-    	}
-    	else{
-    		u = mid - 1;
-    	}
+    int mn = a + b;
+    for(int i = 1; i <= max(a, b) && i <= 1e5; i++){
+        int mv = i - 1 + (a + i - 1) / i + (b + i - 1) / i;
+        mn = min(mn, mv); 
     }
 
-    // debug(ind);
-
-    int mx = (m1 + ind - 1) / ind + (m2 + ind - 1) / ind + ind - 1;
-
-    cout << mx << "\n";
+    cout << mn << "\n";
 }
 
 

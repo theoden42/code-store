@@ -26,36 +26,28 @@ const int MAX_N = 1e6 + 5;
 const ll MOD = 1e9 + 7;
 const ll INF = 1e9;
 
+void find(int n, int curr, vector<int>& vis){
+    if(vis[curr])
+        return;
+    vis[curr] = 1;
+    string ans = "";
+    int temp = curr;
+    for(int i = 0; i < n; i++){
+        ans += (char)('0' + (temp & 1));
+        temp >>= 1;
+    }
+    reverse(all(ans));
+    cout << ans << "\n";
+    for(int i = 0; i < n; i++){
+        find(n, (curr ^ (1 << i)), vis);
+    }
+}
+
 void solve() {
     int n;
     cin >> n;
-    int l = (1 << (n));
-    debug(l);
-
-
-    vector<pair<int,string>> vp;
-
-    for(int i = 0; i < l; i++){
-    	int cnt = 0;
-    	string s = "";
-    	for(int j = 0; j < n; j++){
-    		if(i & (1 << j)){
-    			cnt += 1;
-    			s += '1';
-    		}
-    		else{
-    			s += '0';
-    		}
-    	}
-    	debug(i, s);
-    	reverse(all(s));
-    	vp.push_back({cnt, s});
-    }
-
-    sort(all(vp));
-    for(int i = 0; i < vp.size(); i++){
-    	cout << vp[i].second << "\n";
-    }
+    vector<int> vis((1 << n));
+    find(n, 0, vis);
 }
 
 

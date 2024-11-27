@@ -134,9 +134,6 @@ void solve() {
 				sum2 += (md - rm);
 			}
 		}
-
-
-
 	}
 }
 

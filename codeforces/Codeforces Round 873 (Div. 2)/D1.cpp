@@ -1,5 +1,3 @@
-
-
 /* author: (g)theoden42 */
 
 #include <bits/stdc++.h>
@@ -26,49 +24,91 @@ const int MAX_N = 1e6 + 5;
 const ll MOD = 1e9 + 7;
 const ll INF = 1e9;
 
-#define int long long
+struct node{
+	int left;
+	int right;
+	int leastlement;
+	int maxelement;
+
+	void init(int l, int r, int mx, int mn){
+		left = l;
+		right =  r;
+		leastlement = mn;
+		maxelement = mx;
+	}
+
+	bool contains(int val){
+		return (val >= leastlement && val <= maxelement);
+	}
+
+};
+
 
 void solve() {
     int n;
     cin >> n;
     vector<int> a(n);
+
     for(int i = 0; i < n; i++){
     	cin >> a[i];
     }
 
-    int ans = 0;
-    for(int i = 0; i < n - 1; i++){
-    	int mx = a[i];
-    	vector<int> indices;
-    	ordset<pair<int,int>> st;
-    	indices.push_back(0);
-    	st.insert({a[i], i});
+    // debug(a);
 
-		for(int j = i + 1; j < n; j++){
-			st.insert({a[j], j});
-			if(a[j] > mx){
-				mx = a[j];
-				indices.push_back(j - i);
-			}	
-			else{
-				int ind = st.order_of_key({a[j], j});
-				int del = (int)(indices.end() - lower_bound(all(indices), ind));
-				int count = 0;
-				while(count < del){
-					indices.pop_back();
-					count++;
-				}
-			}
-			ans += max(0ll, (j - i - (int)indices.size()));
-			debug(i, j, ans);
-		}
+    ll ans = 0;
+    for(int i = 0; i < n; i++){
+    	ll last = 0;
+    	int mx = 0;
+    	stack<node> ranges;
+
+    	for(int j = i; j < n; j++){
+
+    		if(a[j] > mx){
+    			node nd;
+    			nd.init(j, j, a[j], a[j]);
+    			ranges.push(nd);
+    		}
+    		else{
+    			int new_mx = a[j];
+    			int new_mn = a[j];
+    			while(!ranges.empty() && !(ranges.top().maxelement < a[j])){
+    				node x = ranges.top();
+    				last -= (x.right - x.left);
+    				new_mn = min(x.leastlement, new_mn);
+    				new_mx = max(x.maxelement, new_mx);
+    				ranges.pop();
+    			}
+
+    			if(ranges.empty()){
+    				node nd;
+    				nd.init(i, j, new_mx, new_mn);
+    				// debug(j, i);
+    				last += j - i;
+    				ranges.push(nd);
+    			}
+    			else{
+    				node x = ranges.top();
+    				node nt;
+    				nt.init(x.right + 1, j, new_mx, new_mn);
+    				ranges.push(nt);
+    				last += j - x.right - 1;
+
+    			}
+
+    		}
+    		mx = max(mx, a[j]);
+    		ans += last;
+    		// debug(last, ans);
+    	}
     }
 
     cout << ans << "\n";
+
+
 }
 
 
-int32_t main() {
+int main() {
     ios_base::sync_with_stdio(0);
     cin.tie(0); cout.tie(0);
     int tc = 1;
